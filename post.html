@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>View Post</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header>
+    <h1>View Post</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="new-post.html">Create Post</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="form-section">
+      <div id="post-container"></div>
+    </section>
+  </main>
+
+  <script>
+    const postContainer = document.getElementById("post-container");
+
+    function getPostId() {
+      const params = new URLSearchParams(window.location.search);
+      return params.get("id");
+    }
+
+    function loadPost() {
+      const postId = getPostId();
+      const posts = JSON.parse(localStorage.getItem("blogPosts")) || [];
+
+      if (postId === null || !posts[postId]) {
+        postContainer.innerHTML = "<p>Post not found.</p>";
+        return;
+      }
+
+      const post = posts[postId];
+
+      postContainer.innerHTML = `
+        <div id="view-mode">
+          <h2>${post.title}</h2>
+          ${post.image ? `<img src="${post.image}" alt="Post image" style="max-width:100%; margin: 15px 0; border-radius: 8px;" />` : ""}
+          <p>${post.content}</p>
+          <button onclick="enableEdit()">Edit Post</button>
+        </div>
+
+        <div id="edit-mode" style="display:none;">
+          <label for="edit-title">Edit Title</label>
+          <input type="text" id="edit-title" value="${post.title}" />
+
+          <label for="edit-content">Edit Content</label>
+          <textarea id="edit-content" rows="8">${post.content}</textarea>
+
+          <button onclick="saveEdit()">Save Changes</button>
+        </div>
+      `;
+    }
+
+    function enableEdit() {
+      document.getElementById("view-mode").style.display = "none";
+      document.getElementById("edit-mode").style.display = "block";
+    }
+
+    function saveEdit() {
+      const postId = getPostId();
+      const posts = JSON.parse(localStorage.getItem("blogPosts")) || [];
+
+      const updatedTitle = document.getElementById("edit-title").value.trim();
+      const updatedContent = document.getElementById("edit-content").value.trim();
+
+      if (updatedTitle === "" || updatedContent === "") {
+        alert("Title and content cannot be empty.");
+        return;
+      }
+
+      posts[postId].title = updatedTitle;
+      posts[postId].content = updatedContent;
+
+      localStorage.setItem("blogPosts", JSON.stringify(posts));
+
+      alert("Post updated successfully.");
+      loadPost();
+    }
+
+    loadPost();
+  </script>
+</body>
+</html>
