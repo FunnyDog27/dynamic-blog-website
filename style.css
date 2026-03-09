@@ -128,3 +128,86 @@ form button:hover {
 #post-container button {
   margin-top: 15px;
 }
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+header {
+  padding: 1rem;
+}
+
+nav {
+  margin-top: 10px;
+}
+
+nav a {
+  display: inline-block;
+  margin: 5px 10px;
+}
+
+main {
+  width: 100%;
+}
+
+.form-section,
+.post-card,
+#post-container {
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  body {
+    font-size: 15px;
+  }
+
+  header h1 {
+    font-size: 1.8rem;
+  }
+
+  .post-list {
+    grid-template-columns: 1fr;
+  }
+
+  .form-section {
+    padding: 15px;
+  }
+
+  form input[type="text"],
+  form textarea,
+  form input[type="file"] {
+    font-size: 1rem;
+  }
+
+  form button,
+  #post-container button {
+    width: 100%;
+    margin-top: 10px;
+  }
+
+  nav a {
+    display: block;
+    margin: 8px 0;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .post-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  main {
+    max-width: 95%;
+  }
+}
+
+@media (min-width: 1025px) {
+  .post-list {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  }
+
+  main {
+    max-width: 900px;
+  }
+}
