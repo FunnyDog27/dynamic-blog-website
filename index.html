@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dynamic Blog Website</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header>
+    <h1>My Blog</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="new-post.html">Create Post</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="post-list-section">
+      <h2>All Blog Posts</h2>
+      <div id="post-list" class="post-list"></div>
+    </section>
+  </main>
+
+  <script>
+    const postList = document.getElementById("post-list");
+
+    function loadPosts() {
+      const posts = JSON.parse(localStorage.getItem("blogPosts")) || [];
+
+      if (posts.length === 0) {
+        postList.innerHTML = "<p>No blog posts yet.</p>";
+        return;
+      }
+
+      postList.innerHTML = "";
+
+      posts.forEach((post, index) => {
+        const postCard = document.createElement("div");
+        postCard.classList.add("post-card");
+
+        postCard.innerHTML = `
+          <h3>${post.title}</h3>
+          <p>${post.content.substring(0, 100)}...</p>
+          <a href="post.html?id=${index}">Read More</a>
+        `;
+
+        postList.appendChild(postCard);
+      });
+    }
+
+    loadPosts();
+  </script>
+</body>
+</html>
