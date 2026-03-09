@@ -1,108 +1,88 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>View Post</title>
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <header>
-    <h1>View Post</h1>
-    <nav>
-      <a href="index.html">Home</a>
-      <a href="new-post.html">Create Post</a>
-    </nav>
-  </header>
 
-  <main>
-    <section class="form-section">
-      <div id="post-container"></div>
-    </section>
-  </main>
+  <h1>View Post</h1>
+
+  <a href="index.html">Home</a>
+  <a href="new-post.html">Create New Post</a>
+
+  <div id="postArea"></div>
 
   <script>
-  const postContainer = document.getElementById("post-container");
+    let postArea = document.getElementById("postArea");
 
-  function getPostId() {
-    const params = new URLSearchParams(window.location.search);
-    return params.get("id");
-  }
+    let params = new URLSearchParams(window.location.search);
+    let id = params.get("id");
 
-  function loadPost() {
-    const postId = getPostId();
-    const posts = JSON.parse(localStorage.getItem("blogPosts")) || [];
+    let posts = JSON.parse(localStorage.getItem("blogPosts")) || [];
 
-    if (postId === null || !posts[postId]) {
-      postContainer.innerHTML = "<p>Post not found.</p>";
-      return;
+    if (id == null || posts[id] == undefined) {
+      postArea.innerHTML = "<p>Post not found</p>";
+    } else {
+      showPost();
     }
 
-    const post = posts[postId];
+    function showPost() {
+      let post = posts[id];
 
-    postContainer.innerHTML = `
-      <div id="view-mode">
+      postArea.innerHTML = `
         <h2>${post.title}</h2>
-        ${post.image ? `<img src="${post.image}" alt="Post image" style="max-width:100%; margin: 15px 0; border-radius: 8px;" />` : ""}
+        ${post.image ? `<img src="${post.image}" width="300">` : ""}
         <p>${post.content}</p>
-        <button onclick="enableEdit()">Edit Post</button>
-        <button onclick="deletePost()">Delete Post</button>
-      </div>
 
-      <div id="edit-mode" style="display:none;">
-        <label for="edit-title">Edit Title</label>
-        <input type="text" id="edit-title" value="${post.title}" />
-
-        <label for="edit-content">Edit Content</label>
-        <textarea id="edit-content" rows="8">${post.content}</textarea>
-
-        <button onclick="saveEdit()">Save Changes</button>
-      </div>
-    `;
-  }
-
-  function enableEdit() {
-    document.getElementById("view-mode").style.display = "none";
-    document.getElementById("edit-mode").style.display = "block";
-  }
-
-  function saveEdit() {
-    const postId = getPostId();
-    const posts = JSON.parse(localStorage.getItem("blogPosts")) || [];
-
-    const updatedTitle = document.getElementById("edit-title").value.trim();
-    const updatedContent = document.getElementById("edit-content").value.trim();
-
-    if (updatedTitle === "" || updatedContent === "") {
-      alert("Title and content cannot be empty.");
-      return;
+        <button onclick="editPost()">Edit</button>
+        <button onclick="deletePost()">Delete</button>
+      `;
     }
 
-    posts[postId].title = updatedTitle;
-    posts[postId].content = updatedContent;
+    function editPost() {
+      let post = posts[id];
 
-    localStorage.setItem("blogPosts", JSON.stringify(posts));
+      postArea.innerHTML = `
+        <p>Edit Title:</p>
+        <input type="text" id="editTitle" value="${post.title}">
 
-    alert("Post updated successfully.");
-    loadPost();
-  }
+        <p>Edit Content:</p>
+        <textarea id="editContent">${post.content}</textarea>
 
-  function deletePost() {
-    const postId = getPostId();
-    const posts = JSON.parse(localStorage.getItem("blogPosts")) || [];
-
-    const confirmDelete = confirm("Are you sure you want to delete this post?");
-
-    if (!confirmDelete) {
-      return;
+        <br><br>
+        <button onclick="savePost()">Save Changes</button>
+      `;
     }
 
-    posts.splice(postId, 1);
-    localStorage.setItem("blogPosts", JSON.stringify(posts));
+    function savePost() {
+      let newTitle = document.getElementById("editTitle").value;
+      let newContent = document.getElementById("editContent").value;
 
-    alert("Post deleted successfully.");
-    window.location.href = "index.html";
-  }
+      if (newTitle == "" || newContent == "") {
+        alert("Title and content cannot be empty");
+        return;
+      }
 
-  loadPost();
-</script>
+      posts[id].title = newTitle;
+      posts[id].content = newContent;
+
+      localStorage.setItem("blogPosts", JSON.stringify(posts));
+
+      alert("Post updated");
+      showPost();
+    }
+
+    function deletePost() {
+      let answer = confirm("Are you sure you want to delete this post?");
+
+      if (answer) {
+        posts.splice(id, 1);
+        localStorage.setItem("blogPosts", JSON.stringify(posts));
+        window.location.href = "index.html";
+      }
+    }
+  </script>
+
+</body>
+</html>

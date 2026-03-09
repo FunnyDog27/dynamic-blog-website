@@ -1,55 +1,41 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dynamic Blog Website</title>
-  <link rel="stylesheet" href="styles.css" />
+  <title>My Blog</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <header>
-    <h1>My Blog</h1>
-    <nav>
-      <a href="index.html">Home</a>
-      <a href="new-post.html">Create Post</a>
-    </nav>
-  </header>
 
-  <main>
-    <section class="post-list-section">
-      <h2>All Blog Posts</h2>
-      <div id="post-list" class="post-list"></div>
-    </section>
-  </main>
+  <h1>My Blog Website</h1>
+
+  <a href="index.html">Home</a>
+  <a href="new-post.html">Create New Post</a>
+
+  <h2>All Blog Posts</h2>
+
+  <div id="posts"></div>
 
   <script>
-    const postList = document.getElementById("post-list");
+    let postsDiv = document.getElementById("posts");
 
-    function loadPosts() {
-      const posts = JSON.parse(localStorage.getItem("blogPosts")) || [];
+    let posts = JSON.parse(localStorage.getItem("blogPosts")) || [];
 
-      if (posts.length === 0) {
-        postList.innerHTML = "<p>No blog posts yet.</p>";
-        return;
-      }
+    if (posts.length == 0) {
+      postsDiv.innerHTML = "<p>No posts yet</p>";
+    } else {
+      for (let i = 0; i < posts.length; i++) {
+        let post = posts[i];
 
-      postList.innerHTML = "";
-
-      posts.forEach((post, index) => {
-        const postCard = document.createElement("div");
-        postCard.classList.add("post-card");
-
-        postCard.innerHTML = `
-          <h3>${post.title}</h3>
-          <p>${post.content.substring(0, 100)}...</p>
-          <a href="post.html?id=${index}">Read More</a>
+        postsDiv.innerHTML += `
+          <div class="card">
+            <h3>${post.title}</h3>
+            <p>${post.content}</p>
+            <a href="post.html?id=${i}">View Post</a>
+          </div>
         `;
-
-        postList.appendChild(postCard);
-      });
+      }
     }
-
-    loadPosts();
   </script>
+
 </body>
 </html>
