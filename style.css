@@ -115,3 +115,16 @@ form button:hover {
   margin-top: 15px;
   font-weight: bold;
 }
+
+#post-container h2 {
+  margin-bottom: 15px;
+}
+
+#post-container p {
+  margin-bottom: 15px;
+  white-space: pre-line;
+}
+
+#post-container button {
+  margin-top: 15px;
+}
