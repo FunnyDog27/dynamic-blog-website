@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Create New Post</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header>
+    <h1>Create New Post</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="new-post.html">Create Post</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="form-section">
+      <form id="post-form">
+        <label for="title">Post Title</label>
+        <input type="text" id="title" name="title" />
+
+        <label for="content">Post Content</label>
+        <textarea id="content" name="content" rows="8"></textarea>
+
+        <label for="image">Optional Image</label>
+        <input type="file" id="image" name="image" accept="image/*" />
+
+        <button type="submit">Save Post</button>
+      </form>
+
+      <p id="message"></p>
+    </section>
+  </main>
+
+  <script>
+    const form = document.getElementById("post-form");
+    const message = document.getElementById("message");
+
+    form.addEventListener("submit", function(event) {
+      event.preventDefault();
+
+      const title = document.getElementById("title").value.trim();
+      const content = document.getElementById("content").value.trim();
+      const imageInput = document.getElementById("image");
+
+      if (title === "" || content === "") {
+        message.textContent = "Title and content cannot be empty.";
+        message.style.color = "red";
+        return;
+      }
+
+      const posts = JSON.parse(localStorage.getItem("blogPosts")) || [];
+
+      const savePost = (imageData = "") => {
+        const newPost = {
+          title: title,
+          content: content,
+          image: imageData
+        };
+
+        posts.push(newPost);
+        localStorage.setItem("blogPosts", JSON.stringify(posts));
+
+        message.textContent = "Post saved successfully.";
+        message.style.color = "green";
+
+        form.reset();
+      };
+
+      if (imageInput.files.length > 0) {
+        const file = imageInput.files[0];
+        const reader = new FileReader();
+
+        reader.onload = function() {
+          savePost(reader.result);
+        };
+
+        reader.readAsDataURL(file);
+      } else {
+        savePost();
+      }
+    });
+  </script>
+</body>
+</html>
