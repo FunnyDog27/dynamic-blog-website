@@ -1,0 +1,32 @@
+Project Plan: Dynamic Blog Website
+
+Repository Name:
+dynamic-blog-website
+
+Pages:
+1. index.html
+   - This will be the homepage.
+   - It will display all blog posts.
+   - Users can click a post to view it.
+
+2. new-post.html
+   - This page will allow users to create a new blog post.
+   - It will include a form with title and content fields.
+
+3. post.html
+   - This page will display a single blog post.
+   - Users can edit or delete the selected post.
+
+JavaScript Functionality:
+- Create: Add a new blog post
+- Read: Display all posts and individual posts
+- Update: Edit an existing post
+- Delete: Remove a post
+
+Storage Plan:
+- Use JavaScript to manage blog post data
+- Posts may be stored temporarily in localStorage for practice
+
+Optional Files:
+- style.css for styling
+- script.js for JavaScript logic
